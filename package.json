@@ -1,0 +1,17 @@
+{
+  "name": "ariston-suites-project",
+  "version": "1.0.0",
+  "description": "Ariston Suites Website - Next.js + Strapi CMS",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend/strapi-cms && npm run develop",
+    "dev:frontend": "cd frontend/ariston-website && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend/strapi-cms && npm run build",
+    "build:frontend": "cd frontend/ariston-website && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
