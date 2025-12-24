@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect } from 'react';
-import { Menu, X, Phone, Moon, Sun } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from './theme-provider';
+import BookingButton from '@/components/cta/booking-button';
+import QuickContact from '@/components/cta/quick-contact';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, Moon, Phone, Sun, X } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { useTheme } from './theme-provider';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Rooms', href: '/rooms' },
@@ -35,24 +37,23 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const headerClasses = mounted && isScrolled
-    ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg'
-    : 'bg-transparent';
+  const headerClasses =
+    mounted && isScrolled
+      ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg'
+      : 'bg-transparent';
 
-  const textColorClasses = mounted && isScrolled
-    ? 'text-primary-900 dark:text-white'
-    : 'text-white';
+  const textColorClasses =
+    mounted && isScrolled ? 'text-primary-900 dark:text-white' : 'text-white';
 
-  const textColorSecondary = mounted && isScrolled
-    ? 'text-accent-600 dark:text-gray-400'
-    : 'text-white/80';
+  const textColorSecondary =
+    mounted && isScrolled ? 'text-accent-600 dark:text-gray-400' : 'text-white/80';
 
-  const navTextColor = mounted && isScrolled
-    ? 'text-accent-900 dark:text-gray-200'
-    : 'text-white';
+  const navTextColor = mounted && isScrolled ? 'text-accent-900 dark:text-gray-200' : 'text-white';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${headerClasses}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${headerClasses}`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
@@ -60,7 +61,9 @@ export default function Header() {
               <span className="text-white font-bold text-xl">AS</span>
             </div>
             <div className="ml-3">
-              <h1 className={`font-display text-xl font-bold transition-colors ${textColorClasses}`}>
+              <h1
+                className={`font-display text-xl font-bold transition-colors ${textColorClasses}`}
+              >
                 Ariston Suites
               </h1>
               <p className={`text-xs transition-colors ${textColorSecondary}`}>
@@ -152,14 +155,8 @@ export default function Header() {
                   <Phone className="w-4 h-4" />
                   <span className="text-sm font-medium">+92 300 1234567</span>
                 </a>
-                <a
-                  href="https://wa.me/+923001234567"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium text-center"
-                >
-                  Book Now via WhatsApp
-                </a>
+                <QuickContact />
+                <BookingButton size="sm" />
               </div>
             </nav>
           </motion.div>
