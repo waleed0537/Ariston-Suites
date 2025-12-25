@@ -315,31 +315,19 @@ export default function TestimonialsPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-primary-800/85 to-primary-700/80 dark:from-gray-950/90 dark:via-gray-900/85 dark:to-primary-900/80" />
           </motion.div>
 
-          <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
+          <div className="relative z-10 text-center px-4 max-w-6xl mx-auto p-2">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20"
-              >
-                <Star className="w-5 h-5 text-amber-300 fill-amber-300" />
-                <span className="text-sm font-bold text-white uppercase tracking-wider">
-                  4.9 Average Rating
-                </span>
-              </motion.div>
-
-              <div className="space-y-6">
+              <div className="space-y-6 min-h-[40vh]">
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-none text-white"
+                  className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-none text-white pt-30"
                 >
                   Guest
                   <br />
@@ -347,16 +335,6 @@ export default function TestimonialsPage() {
                     Testimonials
                   </span>
                 </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
-                  className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto"
-                >
-                  Discover why over 1,250 guests have rated us 4.9 stars and shared their
-                  unforgettable experiences at Ariston Suites
-                </motion.p>
               </div>
 
               {/* Stats Grid */}
@@ -1150,18 +1128,18 @@ export default function TestimonialsPage() {
               className="space-y-8"
             >
               <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4">
-                <Heart className="w-5 h-5 text-white" />
-                <span className="text-sm font-semibold text-white uppercase tracking-wider">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-semibolduppercase tracking-wider">
                   Join Our Happy Guests
                 </span>
               </div>
 
-              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 Experience The Ariston Difference
               </h2>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-3xl mx-auto">
-                Don't just take our word for it. Book your stay today and discover why over 98% of
+              <p className="text-xl  leading-relaxed max-w-3xl mx-auto">
+                Dont just take our word for it. Book your stay today and discover why over 98% of
                 our guests would recommend us to their friends and family.
               </p>
 
@@ -1192,7 +1170,7 @@ export default function TestimonialsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   href="/rooms"
-                  className="px-10 py-5 bg-white/10 backdrop-blur-md text-white border-2 border-white/30 rounded-full hover:bg-white/20 transition-all duration-300 font-bold text-lg flex items-center gap-3"
+                  className="px-10 py-5 bg-white/10 backdrop-blur-md  border-2 border-white/30 rounded-full hover:bg-white/20 transition-all duration-300 font-bold text-lg flex items-center gap-3"
                 >
                   <Sparkles className="w-6 h-6" />
                   <span>Explore Our Rooms</span>
@@ -1202,20 +1180,20 @@ export default function TestimonialsPage() {
               {/* Trust Indicators */}
               <div className="grid grid-cols-4 gap-4 mt-16 pt-12 border-t border-white/20">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-white mb-2">4.9★</div>
-                  <div className="text-sm text-white/80">Rating</div>
+                  <div className="text-4xl font-bold  mb-2">4.9★</div>
+                  <div className="text-sm ">Rating</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-white mb-2">98%</div>
-                  <div className="text-sm text-white/80">Recommend</div>
+                  <div className="text-4xl font-bold  mb-2">98%</div>
+                  <div className="text-sm ">Recommend</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-white mb-2">1.2K+</div>
-                  <div className="text-sm text-white/80">Reviews</div>
+                  <div className="text-4xl font-bold  mb-2">1.2K+</div>
+                  <div className="text-sm ">Reviews</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-white mb-2">15+</div>
-                  <div className="text-sm text-white/80">Awards</div>
+                  <div className="text-4xl font-bold  mb-2">15+</div>
+                  <div className="text-sm ">Awards</div>
                 </div>
               </div>
             </motion.div>

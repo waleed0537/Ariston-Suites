@@ -342,19 +342,6 @@ export default function AmenitiesPage() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              {/* Badge */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20"
-              >
-                <Sparkles className="w-5 h-5 text-amber-300" />
-                <span className="text-sm font-bold uppercase tracking-wider">
-                  World-Class Amenities
-                </span>
-              </motion.div>
-
               {/* Main Heading */}
               <div className="space-y-6">
                 <motion.h1

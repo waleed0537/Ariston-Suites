@@ -235,19 +235,7 @@ export default function ContactPage() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20"
-              >
-                <MessageCircle className="w-5 h-5 text-amber-300" />
-                <span className="text-sm font-bold text-white uppercase tracking-wider">
-                  We are Here to Help
-                </span>
-              </motion.div>
-
-              <div className="space-y-6">
+              <div className="space-y-6 mt-6">
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -788,7 +776,7 @@ export default function ContactPage() {
                 href="https://wa.me/923001234567"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-bold shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600  rounded-xl hover:bg-primary-700 transition-colors font-bold shadow-lg hover:shadow-xl"
               >
                 <MessageCircle className="w-5 h-5" />
                 Ask Us on WhatsApp

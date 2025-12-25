@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Quote, Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const testimonials = [
   {
@@ -62,9 +62,7 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
-            Guest Testimonials
-          </h2>
+          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">Guest Testimonials</h2>
           <p className="text-lg text-primary-100 dark:text-gray-400">
             Hear what our guests have to say about their experience
           </p>

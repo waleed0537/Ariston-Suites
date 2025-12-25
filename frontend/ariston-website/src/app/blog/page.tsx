@@ -349,19 +349,7 @@ export default function BlogPage() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20"
-              >
-                <BookOpen className="w-5 h-5 text-amber-300" />
-                <span className="text-sm font-bold text-white uppercase tracking-wider">
-                  Travel & Lifestyle Blog
-                </span>
-              </motion.div>
-
-              <div className="space-y-6">
+              <div className="space-y-6 mt-8">
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -433,7 +421,7 @@ export default function BlogPage() {
                       onClick={() => setSelectedCategory(category.name)}
                       className={`group relative px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all duration-300 flex items-center gap-2 ${
                         isActive
-                          ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg'
+                          ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-black shadow-lg'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                       }`}
                     >
@@ -442,7 +430,7 @@ export default function BlogPage() {
                       <span
                         className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                           isActive
-                            ? 'bg-white/20 text-white'
+                            ? 'bg-white/20 text-black'
                             : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                         }`}
                       >
@@ -460,7 +448,7 @@ export default function BlogPage() {
                     onClick={() => setViewMode('grid')}
                     className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                       viewMode === 'grid'
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-primary-600 text-black'
                         : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
@@ -470,7 +458,7 @@ export default function BlogPage() {
                     onClick={() => setViewMode('list')}
                     className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                       viewMode === 'list'
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-primary-600 text-black'
                         : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
@@ -769,9 +757,7 @@ export default function BlogPage() {
                     <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Search className="w-10 h-10 text-gray-400 dark:text-gray-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                      No articles found
-                    </h3>
+                    <h3 className="text-2xl font-bold text-gray-900  mb-2">No articles found</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                       Try adjusting your filters or search query
                     </p>
@@ -780,7 +766,7 @@ export default function BlogPage() {
                         setSelectedCategory('All Posts');
                         setSearchQuery('');
                       }}
-                      className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-semibold"
+                      className="px-6 py-3 bg-primary-600 rounded-xl text-black hover:bg-primary-700 transition-colors font-semibold"
                     >
                       Clear Filters
                     </button>
@@ -894,22 +880,22 @@ export default function BlogPage() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 shadow-xl text-white"
+                  className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 shadow-xl "
                 >
                   <Sparkles className="w-12 h-12 mb-4" />
                   <h3 className="font-bold text-xl mb-2">Stay Updated</h3>
-                  <p className="text-white/90 text-sm mb-4">
+                  <p className=" text-sm mb-4">
                     Subscribe to our newsletter for the latest travel tips and exclusive offers.
                   </p>
-                  <form className="space-y-3">
+                  <form className="space-y-3 text-black">
                     <input
                       type="email"
                       placeholder="Your email address"
-                      className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+                      className="w-full px-4 py-3 rounded-lg bg-white/10 border text-black  focus:outline-black focus:ring-2 focus:ring-white/50"
                     />
                     <button
                       type="submit"
-                      className="w-full px-4 py-3 bg-white text-primary-600 rounded-lg font-bold hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
+                      className="w-full px-4 py-3 text-primary-600 rounded-lg font-bold  transition-colors flex items-center justify-center gap-2"
                     >
                       Subscribe
                       <ArrowRight className="w-5 h-5" />
