@@ -10,25 +10,22 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.r2.cloudflarestorage.com',
+        hostname: '*.unsplash.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'pub-*.r2.dev',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com', // ← Add this
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
       },
     ],
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    qualities: [75, 85],
+    // Allow localhost images in development
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
-  },
+  // Disable strict mode to avoid double rendering issues in development
+  reactStrictMode: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;

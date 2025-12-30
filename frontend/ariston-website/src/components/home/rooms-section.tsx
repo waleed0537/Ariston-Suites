@@ -4,68 +4,126 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Maximize, Sparkles, Star, Users } from 'lucide-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
-const rooms = [
-  {
-    id: 1,
-    title: 'Standard Room',
-    category: 'Standard',
-    description: 'Comfortable and elegant room perfect for business or leisure travelers',
-    price: 12000,
-    capacity: 2,
-    size: 25,
-    image: '/images/room-standard.jpg',
-    features: ['King Size Bed', 'City View', 'Free WiFi', 'Mini Bar'],
+// Strapi Response Types
+interface StrapiImage {
+  id: number;
+  url: string;
+  alternativeText?: string;
+}
+
+interface StrapiRoom {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  capacity: number;
+  size: number;
+  features: string[];
+  category: 'Standard' | 'Deluxe' | 'King Deluxe' | 'Twin Deluxe';
+  images: StrapiImage[];
+}
+
+interface Room {
+  id: number;
+  documentId?: string;
+  title: string;
+  category: string;
+  description: string;
+  price: number;
+  capacity: number;
+  size: number;
+  image: string;
+  features: string[];
+  badge: string;
+  gradient: string;
+}
+
+// Category mappings
+const categoryConfig: Record<string, { badge: string; gradient: string }> = {
+  Standard: {
     badge: 'Popular',
     gradient: 'from-primary-600/90 to-primary-800/90',
   },
-  {
-    id: 2,
-    title: 'Deluxe Suite',
-    category: 'Deluxe',
-    description: 'Spacious suite with premium amenities and stunning views',
-    price: 18000,
-    capacity: 2,
-    size: 35,
-    image: '/images/room-deluxe.jpg',
-    features: ['King Size Bed', 'Separate Living Area', 'Luxury Bathroom', 'Premium Toiletries'],
+  Deluxe: {
     badge: 'Best Value',
     gradient: 'from-amber-600/90 to-amber-800/90',
   },
-  {
-    id: 3,
-    title: 'King Deluxe Suite',
-    category: 'King Deluxe',
-    description: 'Our finest accommodation with exceptional comfort and luxury',
-    price: 25000,
-    capacity: 3,
-    size: 45,
-    image: '/images/room-king-deluxe.jpg',
-    features: ['King Size Bed', 'Panoramic View', 'Jacuzzi', 'Private Balcony'],
+  'King Deluxe': {
     badge: 'Luxury',
     gradient: 'from-purple-600/90 to-purple-900/90',
   },
-  {
-    id: 4,
-    title: 'Twin Deluxe Room',
-    category: 'Twin Deluxe',
-    description: 'Ideal for families or friends traveling together',
-    price: 22000,
-    capacity: 4,
-    size: 40,
-    image: '/images/room-twin-deluxe.jpg',
-    features: ['Two Queen Beds', 'Family Friendly', 'Large Bathroom', 'Work Desk'],
+  'Twin Deluxe': {
     badge: 'Family',
     gradient: 'from-teal-600/90 to-teal-800/90',
   },
-];
+};
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function RoomsSection() {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [visibleCount, setVisibleCount] = useState(1);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  // Fetch rooms from Strapi
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+        const response = await fetch(`${strapiUrl}/api/rooms?populate=images`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch rooms');
+        }
+
+        const json = await response.json();
+        const strapiRooms: StrapiRoom[] = json.data;
+
+        // Transform Strapi data to component format
+        const transformedRooms: Room[] = strapiRooms
+          .filter((room) => room.publishedAt) // Only show published rooms
+          .map((room) => {
+            const config = categoryConfig[room.category] || categoryConfig.Standard;
+            const firstImage = room.images?.[0];
+            const imageUrl = firstImage
+              ? `${strapiUrl}${firstImage.url}`
+              : '/images/room-placeholder.jpg';
+
+            return {
+              id: room.id,
+              documentId: room.documentId,
+              title: room.title,
+              category: room.category,
+              description: room.description || '',
+              price: room.price,
+              capacity: room.capacity || 2,
+              size: room.size || 25,
+              image: imageUrl,
+              features: Array.isArray(room.features) ? room.features : [],
+              badge: config.badge,
+              gradient: config.gradient,
+            };
+          });
+
+        setRooms(transformedRooms);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching rooms:', err);
+        setError('Failed to load rooms. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
 
   useIsomorphicLayoutEffect(() => {
     setMounted(true);
@@ -100,6 +158,67 @@ export default function RoomsSection() {
   };
 
   const visibleRooms = getVisibleRooms();
+
+  // Loading state
+  if (loading) {
+    return (
+      <section
+        id="rooms"
+        className="relative py-24 px-4 overflow-hidden bg-gradient-to-b from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
+      >
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-primary-900 dark:text-white mb-6">
+              Loading <span className="text-primary-600 dark:text-primary-400">Rooms</span>...
+            </h2>
+          </div>
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-600 border-t-transparent"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section
+        id="rooms"
+        className="relative py-24 px-4 overflow-hidden bg-gradient-to-b from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
+      >
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center">
+            <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-primary-900 dark:text-white mb-6">
+              Oops!
+            </h2>
+            <p className="text-xl text-accent-600 dark:text-gray-300 max-w-3xl mx-auto">{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Empty state
+  if (rooms.length === 0) {
+    return (
+      <section
+        id="rooms"
+        className="relative py-24 px-4 overflow-hidden bg-gradient-to-b from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
+      >
+        <div className="container mx-auto max-w-7xl relative z-10">
+          <div className="text-center">
+            <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-primary-900 dark:text-white mb-6">
+              No Rooms Available
+            </h2>
+            <p className="text-xl text-accent-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Please check back later for available accommodations.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -145,7 +264,7 @@ export default function RoomsSection() {
 
         {/* Rooms Carousel */}
         <div className="relative px-4 lg:px-20">
-          {mounted && visibleCount > 1 && (
+          {mounted && visibleCount > 1 && rooms.length > 1 && (
             <>
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -197,9 +316,9 @@ export default function RoomsSection() {
                     className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-accent-600 rounded-2xl blur-xl"
                   />
 
-                  {/* Main Card - Changed to min-height with flex layout */}
+                  {/* Main Card */}
                   <div className="relative min-h-[600px] flex flex-col rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 bg-white dark:bg-gray-800">
-                    {/* Image Section - Reduced height slightly */}
+                    {/* Image Section */}
                     <div className="relative h-64 overflow-hidden flex-shrink-0">
                       <motion.div
                         animate={{
@@ -256,7 +375,7 @@ export default function RoomsSection() {
                       </motion.div>
                     </div>
 
-                    {/* Content Section - Flex grow to fill space */}
+                    {/* Content Section */}
                     <div className="flex-1 flex flex-col p-5 space-y-3">
                       {/* Title & Category */}
                       <div>
@@ -266,7 +385,7 @@ export default function RoomsSection() {
                         <h3 className="font-display text-xl font-bold text-primary-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                           {room.title}
                         </h3>
-                        <p className="text-xs text-accent-600 dark:text-gray-400 leading-relaxed">
+                        <p className="text-xs text-accent-600 dark:text-gray-400 leading-relaxed line-clamp-2">
                           {room.description}
                         </p>
                       </div>
@@ -288,34 +407,36 @@ export default function RoomsSection() {
                       </div>
 
                       {/* Features Pills */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {room.features.slice(0, 3).map((feature, idx) => (
-                          <motion.span
-                            key={idx}
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.5 + idx * 0.1 }}
-                            className="text-[10px] px-2.5 py-1 bg-accent-100 dark:bg-gray-700 text-accent-700 dark:text-gray-300 rounded-full font-medium"
-                          >
-                            {feature}
-                          </motion.span>
-                        ))}
-                        {room.features.length > 3 && (
-                          <span className="text-[10px] px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full font-medium">
-                            +{room.features.length - 3} more
-                          </span>
-                        )}
-                      </div>
+                      {room.features.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {room.features.slice(0, 3).map((feature, idx) => (
+                            <motion.span
+                              key={idx}
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.5 + idx * 0.1 }}
+                              className="text-[10px] px-2.5 py-1 bg-accent-100 dark:bg-gray-700 text-accent-700 dark:text-gray-300 rounded-full font-medium"
+                            >
+                              {feature}
+                            </motion.span>
+                          ))}
+                          {room.features.length > 3 && (
+                            <span className="text-[10px] px-2.5 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full font-medium">
+                              +{room.features.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      )}
 
-                      {/* Spacer to push buttons to bottom */}
+                      {/* Spacer */}
                       <div className="flex-1"></div>
 
-                      {/* Action Buttons - Always at bottom */}
+                      {/* Action Buttons */}
                       <div className="flex gap-2 pt-3">
                         <motion.a
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          href={`/rooms/${room.id}`}
+                          href={`/rooms/${room.documentId || room.id}`}
                           className="flex-1 px-4 py-2.5 bg-white dark:bg-gray-700 border-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all duration-300 font-semibold text-center text-sm"
                         >
                           View Details
@@ -326,7 +447,7 @@ export default function RoomsSection() {
                           href="https://wa.me/+923001234567"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 px-4 py-2.5 bg-primary-600 dark:bg-primary-700 hover:bg-primary-700 dark:hover:bg-primary-600  rounded-xl transition-all duration-300 font-semibold text-center shadow-lg hover:shadow-xl text-sm"
+                          className="flex-1 px-4 py-2.5 bg-primary-600 dark:bg-primary-700 hover:bg-primary-700 dark:hover:bg-primary-600 text-white rounded-xl transition-all duration-300 font-semibold text-center shadow-lg hover:shadow-xl text-sm"
                         >
                           Book Now
                         </motion.a>
@@ -350,7 +471,7 @@ export default function RoomsSection() {
           </div>
 
           {/* Mobile Indicators */}
-          {mounted && visibleCount === 1 && (
+          {mounted && visibleCount === 1 && rooms.length > 1 && (
             <div className="flex justify-center gap-2 mt-10">
               {rooms.map((_, index) => (
                 <motion.button
@@ -381,7 +502,7 @@ export default function RoomsSection() {
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             href="/rooms"
-            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-600 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-semibold text-lg group"
+            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-600 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-semibold text-lg group"
           >
             <span>Explore All Rooms</span>
             <motion.span

@@ -27,160 +27,49 @@ import {
   Verified,
   X,
 } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Extended testimonials data with more details
-const testimonials = [
-  {
-    id: 1,
-    name: 'Sarah Ahmed',
-    location: 'Karachi, Pakistan',
-    rating: 5,
-    title: 'Absolutely Wonderful Experience!',
-    content:
-      'The rooms were immaculate, staff was incredibly friendly, and the location was perfect. The breakfast spread was amazing with both continental and local options. The attention to detail in every aspect of our stay was remarkable. The WiFi was super fast, which was important for my work. Will definitely return and highly recommend to everyone!',
-    date: '2024-12-15',
-    roomType: 'Deluxe Suite',
-    stayDuration: '3 nights',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-    verified: true,
-    helpful: 42,
-    images: [
-      'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600',
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600',
-    ],
-  },
-  {
-    id: 2,
-    name: 'Michael Chen',
-    location: 'Singapore',
-    rating: 5,
-    title: 'Outstanding Service and Beautiful Rooms',
-    content:
-      'From check-in to check-out, everything was seamless. The room was spacious and beautifully decorated. The breakfast was delicious with a great variety. Staff went above and beyond to make our anniversary special with a room upgrade and complimentary cake. The rooftop lounge was a perfect spot to unwind. Exceeded all our expectations!',
-    date: '2024-12-10',
-    roomType: 'King Deluxe Suite',
-    stayDuration: '2 nights',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-    verified: true,
-    helpful: 38,
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 3,
-    name: 'Fatima Hassan',
-    location: 'Dubai, UAE',
-    rating: 5,
-    title: 'A Truly Luxurious Experience',
-    content:
-      'Best hotel stay in years! From the moment we entered, we felt welcomed. The attention to detail is remarkable - from the plush bedding to the modern bathroom amenities. The RFID key system was convenient and secure. Housekeeping was excellent, and the 24/7 front desk was always helpful. The location is perfect for both business and leisure.',
-    date: '2024-12-05',
-    roomType: 'Standard Suite',
-    stayDuration: '4 nights',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
-    verified: true,
-    helpful: 56,
-    images: ['https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600'],
-  },
-  {
-    id: 4,
-    name: 'David Williams',
-    location: 'London, UK',
-    rating: 5,
-    title: 'Perfect for Business Travel',
-    content:
-      'As a frequent business traveler, I can confidently say this is one of the best hotels I have stayed in. The WiFi speed was excellent for video conferences. The work desk setup was perfect. The location is convenient with easy access to business districts. Breakfast timing was flexible which suited my early meetings. Professional and efficient service throughout.',
-    date: '2024-11-28',
-    roomType: 'Deluxe Suite',
-    stayDuration: '5 nights',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
-    verified: true,
-    helpful: 31,
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 5,
-    name: 'Aisha Khan',
-    location: 'Lahore, Pakistan',
-    rating: 5,
-    title: 'Exceptional Family Stay',
-    content:
-      'We stayed as a family of four and everything was perfect. The twin deluxe room was spacious enough for all of us. Kids loved the complimentary breakfast, especially the pancakes! Staff was very accommodating with extra bedding and towels. The parking was convenient and secure. The common lounge was a great place for family time in the evening.',
-    date: '2024-11-20',
-    roomType: 'Twin Deluxe Suite',
-    stayDuration: '2 nights',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
-    verified: true,
-    helpful: 45,
-    images: [
-      'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600',
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600',
-    ],
-  },
-  {
-    id: 6,
-    name: 'James Anderson',
-    location: 'New York, USA',
-    rating: 4,
-    title: 'Great Value for Money',
-    content:
-      'Excellent hotel with great amenities at a reasonable price. The room was clean and comfortable. The breakfast spread could have been slightly better, but overall food quality was good. Staff was friendly and helpful. The location is good with restaurants and shops nearby. Would definitely stay again on my next visit.',
-    date: '2024-11-15',
-    roomType: 'Standard Suite',
-    stayDuration: '3 nights',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-    verified: true,
-    helpful: 28,
-  },
-  {
-    id: 7,
-    name: 'Zainab Ali',
-    location: 'Islamabad, Pakistan',
-    rating: 5,
-    title: 'Perfect Weekend Getaway',
-    content:
-      'My husband and I chose this hotel for our weekend anniversary celebration and it was perfect! The room was beautifully maintained with romantic lighting. The staff surprised us with champagne and chocolates. The rooftop lounge at night was magical. Breakfast was delightful. Every detail was taken care of. Truly a memorable stay!',
-    date: '2024-11-08',
-    roomType: 'King Deluxe Suite',
-    stayDuration: '2 nights',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
-    verified: true,
-    helpful: 52,
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  },
-  {
-    id: 8,
-    name: 'Robert Taylor',
-    location: 'Toronto, Canada',
-    rating: 5,
-    title: 'Highly Recommended',
-    content:
-      'Everything about this hotel exceeded my expectations. Check-in was smooth and quick. The room was spotless with modern amenities. The bed was incredibly comfortable - best sleep I have had in a hotel. The bathroom was spacious with excellent water pressure. Location is prime with easy access to attractions. Definitely my go-to hotel in the city now.',
-    date: '2024-10-30',
-    roomType: 'Deluxe Suite',
-    stayDuration: '4 nights',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
-    verified: true,
-    helpful: 39,
-  },
-  {
-    id: 9,
-    name: 'Maria Garcia',
-    location: 'Madrid, Spain',
-    rating: 5,
-    title: 'Wonderful Solo Travel Experience',
-    content:
-      'As a solo female traveler, I felt completely safe and comfortable here. The 24/7 security was reassuring. The room had all the amenities I needed. The staff was respectful and professional. The WiFi was fast enough for streaming. The breakfast timing was flexible. The common areas were perfect for working on my laptop. Highly recommended for solo travelers!',
-    date: '2024-10-22',
-    roomType: 'Standard Suite',
-    stayDuration: '6 nights',
-    image: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400',
-    verified: true,
-    helpful: 47,
-    images: ['https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600'],
-  },
-];
+// Strapi Response Types
+interface StrapiImage {
+  id: number;
+  url: string;
+  alternativeText?: string;
+}
+
+interface StrapiTestimonial {
+  id: number;
+  documentId: string;
+  name: string;
+  location: string;
+  rating: number;
+  title: string;
+  content: string;
+  date: string;
+  roomType: string;
+  stayDuration: string;
+  guestImage: StrapiImage;
+  verified: boolean;
+  helpful: number;
+  reviewImages?: StrapiImage[];
+  videoUrl?: string;
+}
+
+interface Testimonial {
+  id: number;
+  name: string;
+  location: string;
+  rating: number;
+  title: string;
+  content: string;
+  date: string;
+  roomType: string;
+  stayDuration: string;
+  image: string;
+  verified: boolean;
+  helpful: number;
+  images?: string[];
+  videoUrl?: string;
+}
 
 // Statistics for the overview section
 const stats = [
@@ -200,17 +89,13 @@ const ratingBreakdown = [
 ];
 
 // Filter options
-const roomTypes = [
-  'All Rooms',
-  'Standard Suite',
-  'Deluxe Suite',
-  'King Deluxe Suite',
-  'Twin Deluxe Suite',
-];
 const ratings = ['All Ratings', '5 Stars', '4 Stars', '3 Stars'];
 const sortOptions = ['Most Recent', 'Highest Rated', 'Most Helpful'];
 
 export default function TestimonialsPage() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'slider'>('grid');
   const [selectedRoomType, setSelectedRoomType] = useState('All Rooms');
   const [selectedRating, setSelectedRating] = useState('All Ratings');
@@ -223,6 +108,65 @@ export default function TestimonialsPage() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  // Fetch testimonials from Strapi
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setLoading(true);
+        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+        const response = await fetch(
+          `${strapiUrl}/api/testimonials?populate=guestImage&populate=reviewImages&sort=date:desc`
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch testimonials');
+        }
+
+        const json = await response.json();
+        const strapiTestimonials: StrapiTestimonial[] = json.data;
+
+        // Transform Strapi data to component format
+        const transformedTestimonials: Testimonial[] = strapiTestimonials.map((testimonial) => {
+          const guestImageUrl = testimonial.guestImage
+            ? `${strapiUrl}${testimonial.guestImage.url}`
+            : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400';
+
+          const reviewImagesUrls = testimonial.reviewImages?.map((img) => `${strapiUrl}${img.url}`);
+
+          return {
+            id: testimonial.id,
+            name: testimonial.name,
+            location: testimonial.location,
+            rating: testimonial.rating,
+            title: testimonial.title,
+            content: testimonial.content,
+            date: testimonial.date,
+            roomType: testimonial.roomType,
+            stayDuration: testimonial.stayDuration,
+            image: guestImageUrl,
+            verified: testimonial.verified,
+            helpful: testimonial.helpful || 0,
+            images: reviewImagesUrls,
+            videoUrl: testimonial.videoUrl,
+          };
+        });
+
+        setTestimonials(transformedTestimonials);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching testimonials:', err);
+        setError('Failed to load testimonials. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  // Get unique room types from testimonials
+  const roomTypes = ['All Rooms', ...Array.from(new Set(testimonials.map((t) => t.roomType)))];
 
   // Filter testimonials
   const filteredTestimonials = testimonials.filter((testimonial) => {
@@ -262,72 +206,79 @@ export default function TestimonialsPage() {
     setCurrentSlide((prev) => (prev - 1 + sortedTestimonials.length) % sortedTestimonials.length);
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <ThemeProvider>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <Header />
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-600 border-t-transparent mx-auto mb-4"></div>
+              <p className="text-lg text-gray-600 dark:text-gray-400">Loading testimonials...</p>
+            </div>
+          </div>
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <ThemeProvider>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <Header />
+          <div className="flex items-center justify-center min-h-[60vh] px-4">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Oops! Something went wrong
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-semibold"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
         <Header />
 
-        {/* Structured Data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Hotel',
-              name: 'Ariston Suites',
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: '4.9',
-                reviewCount: '1250',
-                bestRating: '5',
-                worstRating: '1',
-              },
-              review: testimonials.slice(0, 5).map((testimonial) => ({
-                '@type': 'Review',
-                author: {
-                  '@type': 'Person',
-                  name: testimonial.name,
-                },
-                datePublished: testimonial.date,
-                reviewBody: testimonial.content,
-                reviewRating: {
-                  '@type': 'Rating',
-                  ratingValue: testimonial.rating,
-                  bestRating: '5',
-                  worstRating: '1',
-                },
-              })),
-            }),
-          }}
-        />
-
         {/* Hero Section */}
         <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920"
-              alt="Happy Hotel Guests"
-              fill
-              className="object-cover"
-              priority
-              quality={90}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage:
+                  'url(https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920)',
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-primary-800/85 to-primary-700/80 dark:from-gray-950/90 dark:via-gray-900/85 dark:to-primary-900/80" />
           </motion.div>
 
-          <div className="relative z-10 text-center px-4 max-w-6xl mx-auto p-2">
+          <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="space-y-6 min-h-[40vh]">
+              <div className="space-y-6">
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-none text-white pt-30"
+                  className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-none text-white"
                 >
                   Guest
                   <br />
@@ -403,7 +354,10 @@ export default function TestimonialsPage() {
                     ))}
                   </div>
                   <div className="text-gray-600 dark:text-gray-400 text-lg">
-                    Based on <span className="font-bold text-gray-900 dark:text-white">1,250+</span>{' '}
+                    Based on{' '}
+                    <span className="font-bold text-gray-900 dark:text-white">
+                      {testimonials.length}
+                    </span>{' '}
                     verified reviews
                   </div>
                   <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full">
@@ -643,12 +597,9 @@ export default function TestimonialsPage() {
                           {/* Avatar */}
                           <div className="relative flex-shrink-0">
                             <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary-500">
-                              <Image
-                                src={testimonial.image}
-                                alt={testimonial.name}
-                                width={64}
-                                height={64}
-                                className="object-cover w-full h-full"
+                              <div
+                                className="w-full h-full bg-cover bg-center"
+                                style={{ backgroundImage: `url('${testimonial.image}')` }}
                               />
                             </div>
                             {testimonial.verified && (
@@ -722,12 +673,9 @@ export default function TestimonialsPage() {
                                 key={imgIdx}
                                 className="relative h-24 rounded-lg overflow-hidden group/img cursor-pointer"
                               >
-                                <Image
-                                  src={img}
-                                  alt={`Review photo ${imgIdx + 1}`}
-                                  fill
-                                  className="object-cover group-hover/img:scale-110 transition-transform duration-300"
-                                  sizes="(max-width: 768px) 50vw, 200px"
+                                <div
+                                  className="absolute inset-0 bg-cover bg-center group-hover/img:scale-110 transition-transform duration-300"
+                                  style={{ backgroundImage: `url('${img}')` }}
                                 />
                               </div>
                             ))}
@@ -740,12 +688,9 @@ export default function TestimonialsPage() {
                             onClick={() => setSelectedVideo(testimonial.videoUrl!)}
                             className="relative w-full h-32 rounded-lg overflow-hidden group/video mb-4"
                           >
-                            <Image
-                              src={testimonial.image}
-                              alt="Video thumbnail"
-                              fill
-                              className="object-cover group-hover/video:scale-110 transition-transform duration-300"
-                              sizes="400px"
+                            <div
+                              className="absolute inset-0 bg-cover bg-center group-hover/video:scale-110 transition-transform duration-300"
+                              style={{ backgroundImage: `url('${testimonial.image}')` }}
                             />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                               <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover/video:scale-110 transition-transform">
@@ -780,191 +725,194 @@ export default function TestimonialsPage() {
               </motion.div>
             ) : (
               // Slider View
-              <div className="relative max-w-4xl mx-auto">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentSlide}
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700"
-                  >
-                    {/* Content */}
-                    <div className="p-8 md:p-12">
-                      {/* Header */}
-                      <div className="flex items-start gap-6 mb-8">
-                        <div className="relative flex-shrink-0">
-                          <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-primary-500">
-                            <Image
-                              src={sortedTestimonials[currentSlide].image}
-                              alt={sortedTestimonials[currentSlide].name}
-                              width={80}
-                              height={80}
-                              className="object-cover w-full h-full"
-                            />
+              sortedTestimonials.length > 0 && (
+                <div className="relative max-w-4xl mx-auto">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentSlide}
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700"
+                    >
+                      {/* Content */}
+                      <div className="p-8 md:p-12">
+                        {/* Header */}
+                        <div className="flex items-start gap-6 mb-8">
+                          <div className="relative flex-shrink-0">
+                            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-primary-500">
+                              <div
+                                className="w-full h-full bg-cover bg-center"
+                                style={{
+                                  backgroundImage: `url('${sortedTestimonials[currentSlide].image}')`,
+                                }}
+                              />
+                            </div>
+                            {sortedTestimonials[currentSlide].verified && (
+                              <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800">
+                                <Verified className="w-4 h-4 text-white" />
+                              </div>
+                            )}
                           </div>
-                          {sortedTestimonials[currentSlide].verified && (
-                            <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800">
-                              <Verified className="w-4 h-4 text-white" />
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-2">
+                              {sortedTestimonials[currentSlide].name}
+                            </h3>
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-3">
+                              <MapPin className="w-4 h-4" />
+                              <span>{sortedTestimonials[currentSlide].location}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                  key={star}
+                                  className={`w-5 h-5 ${
+                                    star <= sortedTestimonials[currentSlide].rating
+                                      ? 'text-amber-400 fill-amber-400'
+                                      : 'text-gray-300 dark:text-gray-600'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Title */}
+                        <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-4">
+                          {sortedTestimonials[currentSlide].title}
+                        </h4>
+
+                        {/* Quote */}
+                        <div className="relative mb-6">
+                          <Quote className="w-12 h-12 text-primary-200 dark:text-primary-900/50 absolute -top-4 -left-2" />
+                          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed pl-8">
+                            {sortedTestimonials[currentSlide].content}
+                          </p>
+                        </div>
+
+                        {/* Metadata */}
+                        <div className="flex flex-wrap gap-3 mb-6">
+                          <span className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full font-semibold text-sm">
+                            {sortedTestimonials[currentSlide].roomType}
+                          </span>
+                          <span className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-semibold text-sm">
+                            {sortedTestimonials[currentSlide].stayDuration}
+                          </span>
+                          <span className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-semibold text-sm flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            {new Date(sortedTestimonials[currentSlide].date).toLocaleDateString(
+                              'en-US',
+                              {
+                                month: 'short',
+                                year: 'numeric',
+                              }
+                            )}
+                          </span>
+                        </div>
+
+                        {/* Images */}
+                        {sortedTestimonials[currentSlide].images &&
+                          sortedTestimonials[currentSlide].images!.length > 0 && (
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                              {sortedTestimonials[currentSlide].images!.map((img, imgIdx) => (
+                                <div
+                                  key={imgIdx}
+                                  className="relative h-48 rounded-xl overflow-hidden group/img cursor-pointer"
+                                >
+                                  <div
+                                    className="absolute inset-0 bg-cover bg-center group-hover/img:scale-110 transition-transform duration-300"
+                                    style={{ backgroundImage: `url('${img}')` }}
+                                  />
+                                </div>
+                              ))}
                             </div>
                           )}
-                        </div>
 
-                        <div className="flex-1">
-                          <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-2">
-                            {sortedTestimonials[currentSlide].name}
-                          </h3>
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-3">
-                            <MapPin className="w-4 h-4" />
-                            <span>{sortedTestimonials[currentSlide].location}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`w-5 h-5 ${
-                                  star <= sortedTestimonials[currentSlide].rating
-                                    ? 'text-amber-400 fill-amber-400'
-                                    : 'text-gray-300 dark:text-gray-600'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Title */}
-                      <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-4">
-                        {sortedTestimonials[currentSlide].title}
-                      </h4>
-
-                      {/* Quote */}
-                      <div className="relative mb-6">
-                        <Quote className="w-12 h-12 text-primary-200 dark:text-primary-900/50 absolute -top-4 -left-2" />
-                        <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed pl-8">
-                          {sortedTestimonials[currentSlide].content}
-                        </p>
-                      </div>
-
-                      {/* Metadata */}
-                      <div className="flex flex-wrap gap-3 mb-6">
-                        <span className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full font-semibold text-sm">
-                          {sortedTestimonials[currentSlide].roomType}
-                        </span>
-                        <span className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-semibold text-sm">
-                          {sortedTestimonials[currentSlide].stayDuration}
-                        </span>
-                        <span className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-semibold text-sm flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          {new Date(sortedTestimonials[currentSlide].date).toLocaleDateString(
-                            'en-US',
-                            {
-                              month: 'short',
-                              year: 'numeric',
+                        {/* Video */}
+                        {sortedTestimonials[currentSlide].videoUrl && (
+                          <button
+                            onClick={() =>
+                              setSelectedVideo(sortedTestimonials[currentSlide].videoUrl!)
                             }
-                          )}
-                        </span>
-                      </div>
-
-                      {/* Images */}
-                      {sortedTestimonials[currentSlide].images &&
-                        sortedTestimonials[currentSlide].images!.length > 0 && (
-                          <div className="grid grid-cols-2 gap-4 mb-6">
-                            {sortedTestimonials[currentSlide].images!.map((img, imgIdx) => (
-                              <div
-                                key={imgIdx}
-                                className="relative h-48 rounded-xl overflow-hidden group/img cursor-pointer"
-                              >
-                                <Image
-                                  src={img}
-                                  alt={`Review photo ${imgIdx + 1}`}
-                                  fill
-                                  className="object-cover group-hover/img:scale-110 transition-transform duration-300"
-                                  sizes="(max-width: 768px) 50vw, 300px"
-                                />
+                            className="relative w-full h-64 rounded-xl overflow-hidden group/video mb-6"
+                          >
+                            <div
+                              className="absolute inset-0 bg-cover bg-center group-hover/video:scale-110 transition-transform duration-300"
+                              style={{
+                                backgroundImage: `url('${sortedTestimonials[currentSlide].image}')`,
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                              <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover/video:scale-110 transition-transform">
+                                <Play className="w-10 h-10 text-primary-600 ml-1" />
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          </button>
                         )}
 
-                      {/* Video */}
-                      {sortedTestimonials[currentSlide].videoUrl && (
-                        <button
-                          onClick={() =>
-                            setSelectedVideo(sortedTestimonials[currentSlide].videoUrl!)
-                          }
-                          className="relative w-full h-64 rounded-xl overflow-hidden group/video mb-6"
-                        >
-                          <Image
-                            src={sortedTestimonials[currentSlide].image}
-                            alt="Video thumbnail"
-                            fill
-                            className="object-cover group-hover/video:scale-110 transition-transform duration-300"
-                            sizes="600px"
-                          />
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover/video:scale-110 transition-transform">
-                              <Play className="w-10 h-10 text-primary-600 ml-1" />
-                            </div>
-                          </div>
-                        </button>
-                      )}
-
-                      {/* Helpful */}
-                      <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Was this review helpful?
-                        </span>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-lg font-semibold hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors">
-                          <ThumbsUp className="w-5 h-5" />
-                          <span>{sortedTestimonials[currentSlide].helpful} found this helpful</span>
-                        </button>
+                        {/* Helpful */}
+                        <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            Was this review helpful?
+                          </span>
+                          <button className="flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-lg font-semibold hover:bg-primary-200 dark:hover:bg-primary-900/50 transition-colors">
+                            <ThumbsUp className="w-5 h-5" />
+                            <span>
+                              {sortedTestimonials[currentSlide].helpful} found this helpful
+                            </span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+                    </motion.div>
+                  </AnimatePresence>
 
-                {/* Navigation */}
-                <div className="flex items-center justify-between mt-8">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={prevSlide}
-                    className="p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-700"
-                  >
-                    <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white" />
-                  </motion.button>
+                  {/* Navigation */}
+                  {sortedTestimonials.length > 1 && (
+                    <>
+                      <div className="flex items-center justify-between mt-8">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={prevSlide}
+                          className="p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-700"
+                        >
+                          <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white" />
+                        </motion.button>
 
-                  {/* Indicators */}
-                  <div className="flex gap-2">
-                    {sortedTestimonials.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentSlide(idx)}
-                        className={`h-2 rounded-full transition-all ${
-                          idx === currentSlide
-                            ? 'bg-primary-600 w-8'
-                            : 'bg-gray-300 dark:bg-gray-600 w-2'
-                        }`}
-                      />
-                    ))}
-                  </div>
+                        {/* Indicators */}
+                        <div className="flex gap-2">
+                          {sortedTestimonials.map((_, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setCurrentSlide(idx)}
+                              className={`h-2 rounded-full transition-all ${
+                                idx === currentSlide
+                                  ? 'bg-primary-600 w-8'
+                                  : 'bg-gray-300 dark:bg-gray-600 w-2'
+                              }`}
+                            />
+                          ))}
+                        </div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={nextSlide}
-                    className="p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-700"
-                  >
-                    <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" />
-                  </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={nextSlide}
+                          className="p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-700"
+                        >
+                          <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" />
+                        </motion.button>
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
+              )
             )}
 
             {/* No Results */}
-            {sortedTestimonials.length === 0 && (
+            {sortedTestimonials.length === 0 && !loading && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1031,12 +979,9 @@ export default function TestimonialsPage() {
                     onClick={() => setSelectedVideo(testimonial.videoUrl!)}
                     className="group relative h-80 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all"
                   >
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    <div
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
+                      style={{ backgroundImage: `url('${testimonial.image}')` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
@@ -1128,18 +1073,18 @@ export default function TestimonialsPage() {
               className="space-y-8"
             >
               <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4">
-                <Heart className="w-5 h-5" />
-                <span className="text-sm font-semibolduppercase tracking-wider">
+                <Heart className="w-5 h-5 text-white" />
+                <span className="text-sm font-semibold text-white uppercase tracking-wider">
                   Join Our Happy Guests
                 </span>
               </div>
 
-              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
                 Experience The Ariston Difference
               </h2>
 
-              <p className="text-xl  leading-relaxed max-w-3xl mx-auto">
-                Dont just take our word for it. Book your stay today and discover why over 98% of
+              <p className="text-xl text-white/90 leading-relaxed max-w-3xl mx-auto">
+                Don't just take our word for it. Book your stay today and discover why over 98% of
                 our guests would recommend us to their friends and family.
               </p>
 
@@ -1170,7 +1115,7 @@ export default function TestimonialsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   href="/rooms"
-                  className="px-10 py-5 bg-white/10 backdrop-blur-md  border-2 border-white/30 rounded-full hover:bg-white/20 transition-all duration-300 font-bold text-lg flex items-center gap-3"
+                  className="px-10 py-5 bg-white/10 backdrop-blur-md text-white border-2 border-white/30 rounded-full hover:bg-white/20 transition-all duration-300 font-bold text-lg flex items-center gap-3"
                 >
                   <Sparkles className="w-6 h-6" />
                   <span>Explore Our Rooms</span>
@@ -1180,20 +1125,20 @@ export default function TestimonialsPage() {
               {/* Trust Indicators */}
               <div className="grid grid-cols-4 gap-4 mt-16 pt-12 border-t border-white/20">
                 <div className="text-center">
-                  <div className="text-4xl font-bold  mb-2">4.9★</div>
-                  <div className="text-sm ">Rating</div>
+                  <div className="text-4xl font-bold text-white mb-2">4.9★</div>
+                  <div className="text-sm text-white/80">Rating</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold  mb-2">98%</div>
-                  <div className="text-sm ">Recommend</div>
+                  <div className="text-4xl font-bold text-white mb-2">98%</div>
+                  <div className="text-sm text-white/80">Recommend</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold  mb-2">1.2K+</div>
-                  <div className="text-sm ">Reviews</div>
+                  <div className="text-4xl font-bold text-white mb-2">{testimonials.length}+</div>
+                  <div className="text-sm text-white/80">Reviews</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold  mb-2">15+</div>
-                  <div className="text-sm ">Awards</div>
+                  <div className="text-4xl font-bold text-white mb-2">15+</div>
+                  <div className="text-sm text-white/80">Awards</div>
                 </div>
               </div>
             </motion.div>
